@@ -38,11 +38,11 @@ export default {
     initiatePayment() {
       const modal = FlutterwaveCheckout({
         public_key: "FLWPUBK_TEST-84a31e77f75ef70b9f68c44b10970627-X",
-        tx_ref: "titanic-48981487343MDI0NzML",
+        tx_ref: "titanic-48951487343MDI0NzML",
         amount: 25,
         currency: "USD",
         payment_options: "card",
-        redirect_url: "https://glaciers.titanic.com/handle-flutterwave-payment",
+        redirect_url: "https://nnamdi-ujah-flutterwave-assessment.netlify.app",
         customer: {
           email: "john@unsinkableship.com",
           phone_number: "08123456789",

@@ -1,36 +1,51 @@
 <template>
   <nav class="navBar">
-    <img class="logo" alt="dasdas logo" src="../assets/logo.svg"/>
+    <RouterLink to="/">
+        <img class="logo" alt="dasdas logo" src="../assets/logo.svg"/>
+    </RouterLink>
     <ul class="social_list">
         <li class="social_list_items">
-            <img class="social_list_items_type_1" alt="twitter icon" src="../assets/twitter.svg"/>
+            <a href="https://twitter.com" target="_blank">
+                <img class="social_list_items_type_1" alt="twitter icon" src="../assets/twitter.svg"/>
+            </a>
         </li>
         <li class="social_list_seperator">
             <div class="seperate"/>
         </li>
         <li class="social_list_items">
-            <img class="social_list_items_type_2" alt="dribble icon" src="../assets/dribble.svg"/>
+            <a href="https://dribbble.com" target="_blank">
+                <img class="social_list_items_type_2" alt="dribble icon" src="../assets/dribble.svg"/>
+            </a>
         </li>
         <li class="social_list_seperator">
             <div class="seperate"/>
         </li>
         <li class="social_list_items">
-            <img class="social_list_items_type_1" alt="figma icon" src="../assets/figma.svg"/>
+            <a href="https://figma.com" target="_blank">
+                <img class="social_list_items_type_1" alt="figma icon" src="../assets/figma.svg"/>
+            </a>
         </li>
         <li class="social_list_seperator">
             <div class="seperate"/>
         </li>
         <li class="social_list_items">
-            <img class="social_list_items_type_1" alt="github icon" src="../assets/github.svg"/>
+            <a href="https://github.com" target="_blank">
+                <img class="social_list_items_type_1" alt="github icon" src="../assets/github.svg"/>
+            </a>
         </li>
     </ul>
   </nav>
 </template>
 
 <script>
-export default {
-  name: 'NavBar'
-}
+    import { RouterLink } from 'vue-router'
+
+    export default {
+        name: 'NavBar',
+        components: {
+            RouterLink
+        }
+    }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
