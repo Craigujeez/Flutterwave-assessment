@@ -1,0 +1,22 @@
+@font-face {
+    font-family: 'SF-Pro-Display';
+    src: url('../../public/fonts/FontsFree-Net-SFProDisplay-Regular.woff2') format('woff2'),
+         url('../../public/fonts/FontsFree-Net-SFProDisplay-Regular.woff') format('woff'),
+         url('../../public/fonts/FontsFree-Net-SFProDisplay-Regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'SF-Pro-Text';
+    src: url('../../public/fonts/FontsFree-Net-SFProText-Regular.woff2') format('woff2'),
+         url('../../public/fonts/FontsFree-Net-SFProText-Regular.woff') format('woff'),
+         url('../../public/fonts/FontsFree-Net-SFProText-Regular.ttf') format('truetype');
+}
+
+.pro-text {
+    font-family: 'SF-Pro-Text', sans-serif;
+}
+.pro-display {
+    font-family: 'SF-Pro-Display', sans-serif;
+}
+.playfair-display{
+    font-family: 'Playfair Display';
+}
