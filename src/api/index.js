@@ -15,10 +15,10 @@ export async function fetchPosts() {
 }
 
 // Function to fetch post details by ID
-async function fetchPostDetails(postId) {
+export async function fetchPostDetails(postId) {
   try {
     const response = await axios.get(`${baseURL}/posts/${postId}`);
-    return response.data;
+    return response;
   } catch (error) {
     console.error(`Error fetching post details for ID ${postId}:`, error);
     throw error;

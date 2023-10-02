@@ -72,7 +72,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
     svg {
-        position: fixed;
+        position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -81,10 +81,11 @@
     }
     .loader_container{
         width: 100%;
-        height: 100vh;
+        height: 50vh;
         background-color: #000;
         overflow: hidden;
         overflow-y: hidden;
+        position: relative;
     }
 
 </style>

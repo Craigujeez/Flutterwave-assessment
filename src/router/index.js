@@ -9,33 +9,9 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      // beforeEnter: async (to, from, next) => {
-      //   try {
-      //     const response = await axios.get(`${baseURL}/posts`);
-      //     console.log('====================================');
-      //     console.log(response.data);
-      //     console.log('====================================');
-      //     return response.data;
-      //   } catch (error) {
-      //     console.error('Error fetching posts:', error);
-      //     throw error;
-      //   }
-      //   // Perform your function here before the page loads
-      //   // For example, fetch data or execute some other logic
-      //   fetchDataBeforePageLoad()
-      //     .then(() => {
-      //       // Continue with the route navigation
-      //       next();
-      //     })
-      //     .catch((error) => {
-      //       console.error('Error:', error);
-      //       // You can also redirect or handle errors as needed
-      //       next('/error');
-      //     });
-      // },
     },
     {
-      path: '/view-post',
+      path: '/view-post/:id',
       name: 'viewPost',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route

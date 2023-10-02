@@ -13,3 +13,13 @@
 .bs-bb{
     box-sizing: border-box;
 }
+
+.post img{
+    width: 100% !important;
+    max-width: 510px !important;
+    margin: 0px auto;
+}
+
+div .wp-caption{
+    width: 100% !important;
+}

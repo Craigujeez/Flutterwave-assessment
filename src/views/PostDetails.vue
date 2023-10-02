@@ -1,61 +1,20 @@
 <template>
   <main>
     <NavBar />
+    <Loader v-if="isLoading" />
     <section class="post">
-      <p class="author pro-text">By Ryan Jackson <span>2 Months Ago</span></p>
-      <h1 class="pro-display">Optimizing CSS for faster page loads </h1>
-      <p class="pro-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-        tempor incididunt ut labore et dolore magna aliqua. Nunc non blandit massa 
-        enim. Pulvinar sapien et ligula ullamcorper malesuada proin libero nunc consequat. 
-        Aliquam sem fringilla ut morbi tincidunt augue interdum velit. Tellus elementum 
-        sagittis vitae et leo duis ut diam. Eget nullam non nisi est sit amet. Dignissim 
-        suspendisse in est ante in nibh mauris. Nec feugiat in fermentum posuere urna. 
-        Diam in arcu cursus euismod quis viverra. Facilisis mauris sit amet massa vitae 
-        tortor condimentum lacinia. Diam quam nulla porttitor massa id neque aliquam 
-        vestibulum morbi. Sed egestas egestas fringilla phasellus faucibus 
-        scelerisque eleifend. Sed elementum tempus egestas sed sed risus pretium quam 
-        vulputate. Lacus sed turpis tincidunt id aliquet risus feugiat in ante. 
-        Viverra nibh cras pulvinar mattis nunc sed blandit libero. Morbi tincidunt 
-        augue interdum velit euismod in. Accumsan lacus vel facilisis volutpat est 
-        velit egestas dui. Erat pellentesque adipiscing commodo elit at imperdiet. 
-        Quis risus sed vulputate odio ut. Nulla aliquet enim tortor at auctor urna.
-      </p>
-      <section class="img-container">
-        <img class="post_image" alt="css variables" src="../assets/Group.png"/>
+      <!-- <p class="author pro-text">By Ryan Jackson <span>2 Months Ago</span></p> -->
+      <section class="flex">
+        <!-- <p class="author pro-text" v-bind:title="post?.yoast_head_json?.author">{{shortString(post?.yoast_head_json?.author,24)}} </p> <div class="seperate" /> <p class="subtle_text">{{this.timeAgo(post?.date)}} </p> -->
       </section>
-      <p class="pro-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-        tempor incididunt ut labore et dolore magna aliqua. Nunc non blandit massa 
-        enim. Pulvinar sapien et ligula ullamcorper malesuada proin libero nunc consequat. 
-        Aliquam sem fringilla ut morbi tincidunt augue interdum velit. Tellus elementum 
-        sagittis vitae et leo duis ut diam. Eget nullam non nisi est sit amet. Dignissim 
-        suspendisse in est ante in nibh mauris. Nec feugiat in fermentum posuere urna. 
-        Diam in arcu cursus euismod quis viverra. Facilisis mauris sit amet massa vitae 
-        tortor condimentum lacinia. Diam quam nulla porttitor massa id neque aliquam 
-        vestibulum morbi. Sed egestas egestas fringilla phasellus faucibus 
-        scelerisque eleifend. Sed elementum tempus egestas sed sed risus pretium quam 
-        vulputate. Lacus sed turpis tincidunt id aliquet risus feugiat in ante. 
-        Viverra nibh cras pulvinar mattis nunc sed blandit libero. Morbi tincidunt 
-        augue interdum velit euismod in. Accumsan lacus vel facilisis volutpat est 
-        velit egestas dui. Erat pellentesque adipiscing commodo elit at imperdiet. 
-        Quis risus sed vulputate odio ut. Nulla aliquet enim tortor at auctor urna.
-      </p>
-      <p class="pro-text">
-        Proin fermentum leo vel orci porta non pulvinar neque. In egestas erat imperdiet 
-        sed euismod nisi porta lorem. Metus vulputate eu scelerisque felis imperdiet 
-        proin fermentum. Luctus venenatis lectus magna fringilla. Nunc scelerisque 
-        viverra mauris in aliquam. Et molestie ac feugiat sed lectus vestibulum mattis. 
-        Sem et tortor consequat id porta nibh venenatis cras sed. Sed felis eget velit 
-        aliquet sagittis id. Auctor neque vitae tempus quam pellentesque nec nam aliquam 
-        sem. Tincidunt ornare massa eget egestas purus viverra accumsan in. Aliquet 
-        lectus proin nibh nisl condime.
-      </p>
+      <h1 class="pro-display" v-html="sanitizeHtml(post?.title?.rendered)"> </h1>
+      <p class="pro-text" v-html="sanitizeHtml(post?.content?.rendered)"></p>
     </section>
     <p class="sub-header pro-display">More Articles</p>
-    <!-- <section class="article_list">
-      <ArticleBox/>
-      <ArticleBox/>
-      <ArticleBox/>
-    </section> -->
+      <Loader v-if="areMorePostLoading" />
+    <section class="article_list">
+      <ArticleBox v-for="item in morePosts" :key="item.id" :propValue="item"/>
+    </section>
   </main>
 </template>
 
@@ -63,13 +22,62 @@
 import NavBar from '../components/NavBar.vue'
 import ArticleBox from '../components/Article.vue'
 import "../scss/global/normalize.scss"
+import {fetchPostDetails,fetchPosts} from '../api'
+import {timeAgo,shortenString} from "../helpers"
+import {useRoute} from "vue-router";
+import DOMPurify from 'dompurify'
+
+const purify = DOMPurify(window);
 
 export default {
   name: 'ViewPost',
   components: {
     NavBar,
-    ArticleBox
-  }
+    ArticleBox,
+    timeAgo,
+    shortenString
+  },
+  // emits: [], 
+  data() {
+    return {
+      isLoading: true,
+      areMorePostLoading: true,
+      post: null,
+      morePosts: null,
+    };
+  },
+  mounted() {
+    try{
+      const route = useRoute();
+      fetchPosts().then(item => {
+        if(item.status === 200){
+          this.areMorePostLoading = false
+          this.morePosts = item.data.filter(item => item.id !== route?.params?.id).slice(0,3);
+        } else {
+          alert(item.statusText);
+        }
+      });
+      fetchPostDetails(route?.params?.id).then(item => {
+        if(item.status === 200){
+          this.isLoading = false
+          this.post = item.data;
+        } else {
+          alert(item.statusText);
+        }
+      });
+
+    } catch (error){
+      console.error(error);
+    }
+  },
+  methods: {
+    sanitizeHtml(htmlContent) {
+      return purify.sanitize(htmlContent);
+    },
+    shortString(string,count){
+      return shortenString(string,count)
+    }
+  },
 }
 </script>
 
@@ -138,6 +146,10 @@ export default {
     font-style: normal;
     font-weight: 400;
     line-height: 21px;
+
+    img{
+      width: 100%;
+    }
   }
   .post .img-container{
     width: 100%;
@@ -149,5 +161,16 @@ export default {
     max-width: 510px;
     margin: 39px auto;
     box-sizing: border-box;
+  }
+  .seperate{
+      width: 2px;
+      height: 2px;
+      border-radius: 100%;
+      background-color: #6E6E6E;
+      margin: auto 4px;
+  }
+  .wp-caption{
+    width: 100%;
+    max-width: 500px;
   }
 </style>

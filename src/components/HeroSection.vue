@@ -9,7 +9,7 @@
         <p class="pro-text mb-20" v-html="sanitizeHtml(propValue?.excerpt?.rendered)"></p>
         <section class="bottom_section">
             <p class="duration pro-text">{{propValue?.yoast_head_json?.twitter_misc["Est. reading time"]}} Read</p>
-            <RouterLink to="/view-post">
+            <RouterLink :to="{name: 'viewPost', params: {id: propValue?.id} }" >
                 <div class="flex read_more_container">
                     <p class="more">Read Full </p>
                     <IconArrow/>
@@ -82,12 +82,14 @@ export default {
         margin-bottom: 16px;
         border-radius: 5px;
         width: 100%;
-        max-width: 500px;
         height: 280px;
         &:hover {
         -webkit-transform: scale(0.9);
         transform: scale(0.9);
         transition: all ease-out 0.2s;
+        }
+        @media (min-width: $breakpoint-large-tablet) {
+            max-width: 500px;
         }
     }
     .hero_text{
@@ -114,8 +116,12 @@ export default {
             width: 100%;
             box-sizing: border-box;
             margin-top: auto;
-            position: absolute;
-            bottom: 20px;
+
+            @media (min-width: $breakpoint-large-tablet) {
+                position: absolute;
+                bottom: 20px;
+            }
+
         }
     }
     .mb-20{
@@ -150,6 +156,8 @@ export default {
         color: $blue;
         font-weight: 700;
         margin: 0px;
+        cursor: pointer;
+
         &:hover{
             text-decoration: underline;
             transition: all ease-in-out 0.2s;

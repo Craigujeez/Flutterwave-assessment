@@ -1,7 +1,7 @@
 <template>
-    <Loader v-if="isLoading" />
   <main>
     <NavBar />
+    <Loader v-if="isLoading" />
     <HeroSection v-for="item in highlightedPost" :key="item.id" :propValue="item"/>
     <section class="article_list" role="feed">
       <ArticleBox v-for="item in posts" :key="item.id" :propValue="item"/>

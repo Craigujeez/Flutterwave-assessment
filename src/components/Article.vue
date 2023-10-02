@@ -9,7 +9,7 @@
         <p class="pro-text hero_text_p mb-20" v-html="sanitizeHtml(propValue?.excerpt?.rendered)"></p>
         <section class="bottom_section">
           <p class="duration pro-text">{{propValue?.yoast_head_json?.twitter_misc["Est. reading time"]}} Read</p>
-          <RouterLink to="/view-post">
+          <RouterLink :to="{name: 'viewPost', params: {id: propValue?.id} }">
             <div class="flex read_more_container">
               <p class="more">Read Full </p>
               <IconArrow/>
