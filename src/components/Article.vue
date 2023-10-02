@@ -10,7 +10,7 @@
         <section class="bottom_section">
           <p class="duration pro-text">{{propValue?.yoast_head_json?.twitter_misc["Est. reading time"]}} Read</p>
           <RouterLink :to="{name: 'viewPost', params: {id: propValue?.id} }">
-            <div class="flex read_more_container">
+            <div class="flex read_more_container" @click="location.reload();">
               <p class="more">Read Full </p>
               <IconArrow/>
             </div>
