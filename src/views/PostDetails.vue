@@ -51,11 +51,11 @@
       </p>
     </section>
     <p class="sub-header pro-display">More Articles</p>
-    <section class="article_list">
+    <!-- <section class="article_list">
       <ArticleBox/>
       <ArticleBox/>
       <ArticleBox/>
-    </section>
+    </section> -->
   </main>
 </template>
 

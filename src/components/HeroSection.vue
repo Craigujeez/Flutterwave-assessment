@@ -1,38 +1,57 @@
 <template>
   <article class="heroSection" role="banner">
-    <section class="hero_banner">
-        <p>🚀</p>
-        <h1 class="playfair-display">Optimizing CSS for faster page loads </h1>
-    </section>
+    <img class="article_image" alt="css variables" v-bind:src="propValue?.jetpack_featured_media_url" /> 
     <aside class="hero_text">
-        <p class="author pro-text">Front-end <span class="subtle_text">1 Hour Ago</span></p>
-        <h1 class="pro-display">Optimizing CSS for faster page loads </h1>
-        <p class="pro-text">Not long ago I decided to improve the loading times of my website. It already loads pretty fast, but I knew there was still room for improvement and one of them was CSS loading. I will walk you through the process and show you how you can improve your load times as well.</p>
-        <p class="pro-text">To see how CSS affects the load time of a webpage we first have to know how the browser converts an HTML document into a functional webpage...</p>
+        <section class="flex">
+          <p class="author pro-text" v-bind:title="propValue?.yoast_head_json?.author">{{shortString(propValue?.yoast_head_json?.author,24)}} </p> <div class="seperate" /> <p class="subtle_text">{{this.timeAgo(propValue?.date)}} </p>
+        </section>
+        <h1 class="pro-display" v-html="sanitizeHtml(propValue?.title?.rendered)"> </h1>
+        <p class="pro-text mb-20" v-html="sanitizeHtml(propValue?.excerpt?.rendered)"></p>
         <section class="bottom_section">
-            <p class="duration pro-text">3 Min Read</p>
+            <p class="duration pro-text">{{propValue?.yoast_head_json?.twitter_misc["Est. reading time"]}} Read</p>
             <RouterLink to="/view-post">
                 <div class="flex read_more_container">
                     <p class="more">Read Full </p>
-                    <a class="icon-container">
-                        <IconArrow/>
-                    </a>
+                    <IconArrow/>
                 </div>
             </RouterLink>
-            <!-- <p class="more">Read Full <span><img alt="arrow" src="../assets/arrow.svg"/></span></p> -->
         </section>
     </aside>
   </article>
 </template>
 
 <script>
+import {RouterLink} from "vue-router"
 import IconArrow from './icons/IconArrow.vue'
+import {timeAgo,shortenString} from "../helpers"
+import DOMPurify from 'dompurify'
+
+
+const purify = DOMPurify(window);
 
 export default {
-  name: 'HeroSection',
-  components: {
-    IconArrow,
-  }
+    name: 'HeroSection',
+    components: {
+      RouterLink,
+      IconArrow,
+      timeAgo,
+      shortenString
+    },
+    data() {
+      return {
+        timeAgo
+      };
+    },
+    props: ['propValue'],
+    methods: {
+        sanitizeHtml(htmlContent) {
+        return purify.sanitize(htmlContent);
+        },
+        shortString(string,count){
+        return shortenString(string,count)
+        }
+    },
+
 }
 </script>
 
@@ -45,6 +64,7 @@ export default {
     $text2: #6E6E6E;
     $blue: #1473E6;
     $breakpoint-tablet: 768px;
+    $breakpoint-large-tablet: 845px;
 
     .heroSection{
         width: 100%;
@@ -53,42 +73,27 @@ export default {
         border-radius: 5px;
         border: 1px solid $brder;
         margin-bottom: 52px;
-        @media (min-width: $breakpoint-tablet) {
+        @media (min-width: $breakpoint-large-tablet) {
             display: flex;
             gap: 16px;
         }
     }
-    .hero_banner{
+    .article_image {
+        margin-bottom: 16px;
+        border-radius: 5px;
         width: 100%;
-        // max-width: 500px;
+        max-width: 500px;
         height: 280px;
-        padding: 34px 16px 48px 16px;
-        background: $hero-color;
-        background-image: url("../assets/Vector.png");
-        background-repeat: no-repeat;
-        background-position: bottom right;
-        background-size: contain;
-        box-sizing: border-box;
-
-        p{
-            font-size: 24px;
-        }
-        h1{
-            font-size: 36px;
-            font-style: normal;
-            font-weight: 900;
-            line-height: normal;
-            color: $white;
-        }
-        @media (min-width: $breakpoint-tablet) {
-            .hero_banner{
-                max-width: 500px;
-            }
+        &:hover {
+        -webkit-transform: scale(0.9);
+        transform: scale(0.9);
+        transition: all ease-out 0.2s;
         }
     }
     .hero_text{
         box-sizing: border-box;
         text-align: left;
+        position: relative;
         h1{
             font-size: 22px;
             font-style: normal;
@@ -108,7 +113,20 @@ export default {
             justify-content: space-between;
             width: 100%;
             box-sizing: border-box;
+            margin-top: auto;
+            position: absolute;
+            bottom: 20px;
         }
+    }
+    .mb-20{
+        margin-bottom: 40px;
+    }
+    .seperate{
+        width: 2px;
+        height: 2px;
+        border-radius: 100%;
+        background-color: #6E6E6E;
+        margin: auto 4px;
     }
     .author,.more{
         font-size: 12px;

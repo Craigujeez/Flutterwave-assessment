@@ -1,14 +1,10 @@
 <template>
+    <Loader v-if="isLoading" />
   <main>
     <NavBar />
-    <HeroSection />
+    <HeroSection v-for="item in highlightedPost" :key="item.id" :propValue="item"/>
     <section class="article_list" role="feed">
-      <ArticleBox/>
-      <ArticleBox/>
-      <ArticleBox/>
-      <ArticleBox/>
-      <ArticleBox/>
-      <ArticleBox/>
+      <ArticleBox v-for="item in posts" :key="item.id" :propValue="item"/>
     </section>
     <section class="join_us">
       <h2 class="pro-display">Join our Team of Writers</h2>
@@ -25,7 +21,7 @@ import NavBar from '../components/NavBar.vue'
 import HeroSection from '../components/HeroSection.vue'
 import ArticleBox from '../components/Article.vue'
 import "../scss/global/normalize.scss"
-import axios from 'axios';
+import {fetchPosts} from '../api'
 
 export default {
   name: 'HomePage',
@@ -33,6 +29,24 @@ export default {
     NavBar,
     HeroSection,
     ArticleBox
+  },
+  data() {
+    return {
+      isLoading: true,
+      posts: null,
+      highlightedPost: null
+    };
+  },
+  mounted() {
+    fetchPosts().then(item => {
+      if(item.status === 200){
+        this.isLoading = false
+        this.posts = item.data.filter((item,index) => index !== 0 );
+        this.highlightedPost = [item.data[0]];
+      } else {
+        alert(item.statusText)
+      }
+    });
   },
   methods: {
     initiatePayment() {

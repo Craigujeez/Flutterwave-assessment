@@ -1,12 +1,14 @@
 <template>
     <article>
-      <img class="article_image" alt="css variables" src="../assets/Group.png"/>
+      <img class="article_image" alt="css variables" v-bind:src="propValue?.jetpack_featured_media_url" />
       <aside class="hero_text">
-        <p class="author pro-text">Front-end <span class="subtle_text">1 Hour Ago</span></p>
-        <h1 class="pro-display">Css Variables </h1>
-        <p class="pro-text hero_text_p">CSS variables are custom properties that cascade normally and even inherit. They start with a reserved -- prefix, and there are no real rules about their value.</p>
-        <section class="flex space-between w-full bs-bb bottom">
-          <p class="duration pro-text">10 Min Read</p>
+        <section class="flex">
+          <p class="author pro-text" v-bind:title="propValue?.yoast_head_json?.author">{{shortString(propValue?.yoast_head_json?.author,24)}} </p> <div class="seperate" /> <p class="subtle_text">{{this.timeAgo(propValue?.date)}} </p>
+        </section>
+        <h1 class="pro-display" v-html="sanitizeHtml(propValue?.title?.rendered)"></h1>
+        <p class="pro-text hero_text_p mb-20" v-html="sanitizeHtml(propValue?.excerpt?.rendered)"></p>
+        <section class="bottom_section">
+          <p class="duration pro-text">{{propValue?.yoast_head_json?.twitter_misc["Est. reading time"]}} Read</p>
           <RouterLink to="/view-post">
             <div class="flex read_more_container">
               <p class="more">Read Full </p>
@@ -21,13 +23,34 @@
 <script>
   import {RouterLink} from "vue-router"
   import IconArrow from "./icons/IconArrow.vue"
+  import {timeAgo,shortenString} from "../helpers"
+  import DOMPurify from 'dompurify'
 
+
+  const purify = DOMPurify(window);
+ 
   export default {
     name: 'ArticleBox',
     components: {
       RouterLink,
-      IconArrow
-    }
+      IconArrow,
+      timeAgo,
+      shortenString
+    },
+    data() {
+      return {
+        timeAgo
+      };
+    },
+    methods: {
+      sanitizeHtml(htmlContent) {
+        return purify.sanitize(htmlContent);
+      },
+      shortString(string,count){
+        return shortenString(string,count)
+      }
+    },
+    props: ['propValue']
   }
 </script>
 
@@ -43,7 +66,9 @@
 
   article{
     margin-bottom: 48px;
+    position: relative;
     width: 100%;
+    // height: 402px;
     border: 1px solid $border;
     background: $white;
     padding: 10px;
@@ -62,25 +87,42 @@
     margin-bottom: 16px;
     border-radius: 5px;
     width: 100%;
+    height: 200px;
   }
   .hero_text{
     box-sizing: border-box;
     text-align: left;
+    h1{
+        font-size: 22px;
+        font-style: normal;
+        font-weight: 900;
+        line-height: normal;
+    }
+    p{
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 21px;
+    }
+    .bottom_section{
+      height: 24px;
+      display: flex;
+      justify-content: space-between;
+      width: 95%;
+      box-sizing: border-box;
+      position: absolute;
+      bottom: 20px;
+    }
   }
-  .hero_text h1{
-    font-size: 22px;
-    font-style: normal;
-    font-weight: 900;
-    line-height: normal;
+  .mb-20{
+    margin-bottom: 40px;
   }
-  .hero_text_p{
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 21px;
-  }
-  .hero_text .bottom{
-    height: 24px;
+  .seperate{
+    width: 2px;
+    height: 2px;
+    border-radius: 100%;
+    background-color: #6E6E6E;
+    margin: auto 4px;
   }
   .author,.more{
     font-size: 12px;
